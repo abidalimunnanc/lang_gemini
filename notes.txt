@@ -1,2 +1,6 @@
 helloworld
 user did not ask any questions
+no further
+not buy milk
+last issue
+ValueError: Invalid hash method 'sha256' is one of the issues related to Flask app. It could be a problem with the hashing algorithm used.

@@ -65,23 +65,23 @@ retriever_tool = create_retriever_tool(
     "Search for information about github issues. For any questions about github issues, you must use this tool!",
 )
 
-# prompt = hub.pull("hwchase17/openai-functions-agent")
-from langchain.schema import SystemMessage, HumanMessage, AIMessage
-from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
+prompt = hub.pull("hwchase17/openai-functions-agent")
+# from langchain.schema import SystemMessage, HumanMessage, AIMessage
+# from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-SYSTEM_PROMPT = """
-You are an AI personal assistant with context awareness. 
-You can retrieve information, take notes, and assist with GitHub issues.
-Use external tools when needed and always provide concise, helpful responses.
-"""
+# SYSTEM_PROMPT = """
+# You are an AI personal assistant with context awareness. 
+# You can retrieve information, take notes, and assist with GitHub issues.
+# Use external tools when needed and always provide concise, helpful responses.
+# """
 
-prompt = ChatPromptTemplate.from_messages(
-    [
-        SystemMessage(content=SYSTEM_PROMPT),
-        HumanMessage(content="{input}"),
-        MessagesPlaceholder(variable_name="agent_scratchpad"),
-    ]
-)
+# prompt = ChatPromptTemplate.from_messages(
+#     [
+#         SystemMessage(content=SYSTEM_PROMPT),
+#         HumanMessage(content="{input}"),
+#         MessagesPlaceholder(variable_name="agent_scratchpad"),
+#     ]
+# )
 
 
 
@@ -93,19 +93,10 @@ note_tools = Tool(
     description="Stores user notes. Provide a note as a string.",
 )
 
-tools = [retriever_tool]
-
+tools = [retriever_tool, note_tools]
 agent = create_tool_calling_agent(llm, tools, prompt)
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 while (question := input("Ask a question about github issues (q to quit): ")) != "q":
-    result = agent_executor.invoke(
-    {
-        "chat_history": [
-            HumanMessage(content="hi! my name is bob"),
-            AIMessage(content="Hello Bob! How can I assist you today?"),
-        ],
-        "input": question,
-    }
-)
+    result = agent_executor.invoke({"input": question})
     print(result["output"])
