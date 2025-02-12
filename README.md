@@ -6,7 +6,9 @@ Github token
 setup Datastax database  get api key 
 get gemni vertex ai api key
 
-put it in .env file 
+``` python -m venv <name_env> ```
+
+.env file 
 
 ``` 
 GITHUB_TOKEN = ""
